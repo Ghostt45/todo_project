@@ -14,7 +14,10 @@
                 </div>
                 @enderror
             </div>
-
+            <div class="form-group mb-3">
+                <label for="datetimepicker">Choose deadline</label>
+                <input type="text" id="datetimepicker" class="form-control" placeholder="{{$todo->deadline_datetime}}" name="datetime" value="{{$todo->deadline_datetime}}">
+            </div>
 
             <button type="submit" class="btn btn-primary">Update</button>
         </form>

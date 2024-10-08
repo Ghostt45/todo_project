@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Carbon\Carbon;
 
 class Todo extends Model
 {
@@ -25,21 +26,35 @@ class Todo extends Model
 
     public function getTaskColorAttribute(): string
     {
-        $available_days = $this->created_at->diffInDays($this->deadline_datetime);
+        $available_days = now()->diffInDays($this->deadline_datetime);
 
-        if ($available_days <= 1) {
-            return 'red';
-        } elseif ($available_days > 1 & $available_days <= 3) {
-            return 'yellow';
+
+        if ($this->deadline_datetime >= Carbon::now()) {
+            if ($available_days <= 1) {
+                return 'red';
+            } elseif ($available_days <= 3) {
+                return 'yellow';
+            } else {
+                return 'green';
+            }
         } else {
-            return 'green';
+            return 'black';
         }
     }
 
 
+
     public function getAvailableDaysAttribute(): string
     {
-        $available_days = $this->created_at->diffInDays($this->deadline_datetime);
-        return $available_days . ' days left';
+        $available_days = now()->diffInDays($this->deadline_datetime);
+        if ($this->deadline_datetime >= Carbon::now()) {
+            if ($available_days == 0) {
+                return 'today';
+            } else {
+                return $available_days . ' days left';
+            }
+        } else {
+            return 'expired';
+        }
     }
 }

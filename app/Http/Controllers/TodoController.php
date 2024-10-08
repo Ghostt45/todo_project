@@ -118,7 +118,8 @@ class TodoController extends Controller
     {
         $data = request()->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string'
+            'type' => 'required|string',
+            'deadline_datetime' => '',
         ]);
         $todo -> update($data);
         return redirect('/');
