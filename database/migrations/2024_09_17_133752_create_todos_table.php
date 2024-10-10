@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->enum('type', ['task', 'hotfix']);
             $table->boolean('status')->default(0);
+            $table->string('image')->nullable();
+            $table->integer('order')->nullable();
             $table->dateTime('deadline_datetime')->nullable();
             $table->timestamps();
         });

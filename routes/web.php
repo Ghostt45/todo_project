@@ -5,10 +5,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [TodoController::class, 'index'])->middleware(['middleware' => 'auth'])->name('todo.index');
-Route::get('/todos/create', [TodoController::class, 'create'])->name('todo.create');
+Route::get ('/todos/create', [TodoController::class, 'create'])->name('todo.create');
 Route::post('/todos/store', [TodoController::class, 'store'])->name('todo.store');
 
 Route::get('/todos/{todo}/edit', [TodoController::class, 'edit'])->name('todo.edit');
+Route::get('/todos/{todo}/view', [TodoController::class, 'view'])->name('todo.view');
 Route::patch('/todos/{todo}', [TodoController::class, 'update'])->name('todo.update');
 
 Route::get('/todos/{todo}/complete', [TodoController::class, 'complete'])->name('todo.complete');
