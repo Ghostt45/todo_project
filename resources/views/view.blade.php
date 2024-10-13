@@ -25,7 +25,7 @@
                 <input type="text" id="datetimepicker" class="form-control" placeholder="Choose deadline" name="datetime" value="{{$todo->deadline_datetime}}" disabled>
             </div>
 
-        <div class="form-group mb-3">
+        <div class="form-group mb-1">
             <label for="formFile" class="form-label">Selected image</label>
         </div>
 

@@ -13,30 +13,29 @@ class TodoController extends Controller
 
     public function index()
     {
-        $todos = Todo::query();
 
-        if (!Auth::user()->admin) {
-            $userId = Auth::id();
-            $todos->where('user_id', $userId);
+        if (Auth::user()->admin) {
+            $hotfixes = Todo::where('type', 'hotfix')
+                ->orderBy('order', 'DESC')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+            $tasks = Todo::where('type', 'task')
+                ->orderBy('order', 'ASC')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        } else {
+            $hotfixes = Todo::where('user_id', Auth::id())->where('type', 'hotfix')
+                ->orderBy('order', 'DESC')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+            $tasks = Todo::where('user_id', Auth::id())->where('type', 'task')
+                ->orderBy('order', 'ASC')
+                ->orderBy('created_at', 'DESC')
+                ->get();
         }
 
-//        $todos = $todos
-//            ->orderBy('type', 'DESC')
-//            ->orderBy('created_at', 'DESC')
-//            ->orderBy('order', 'DESC')
-//            ->get();
 
-        $hotfixes = Todo::where('type', 'hotfix')
-            ->orderBy('order', 'DESC')
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
-        $tasks = Todo::where('type', 'task')
-            ->orderBy('order', 'ASC')
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
-        return view('welcome', compact('todos', 'hotfixes', 'tasks'));
+        return view('welcome', compact( 'hotfixes', 'tasks'));
     }
 
 
@@ -70,50 +69,6 @@ class TodoController extends Controller
         $todo->save();
 
 
-//         $data = [
-//             'name' => request('name'),
-//             'type' => request('type'),
-//             'deadline_datetime' => Carbon::createFromFormat('d-m-Y H:i', $request->get('datetime')),
-//             'image' => request('image')->file('image')->store('images', 'public'),
-//             'user_id' => auth()->id()
-//         ];
-//        Todo::create($data);
-
-//        $todo1 = new Todo([
-//            'name' => $request->get('name'),
-//            'type' => $request->get('type'),
-//            'deadline_datetime' => Carbon::createFromFormat('d  -m-Y H:i', $request->get('datetime')),
-//            'user_id' => Auth::id(),
-//        ]);
-//        $todo1->save();
-
-////        TODO FILL
-//        $todo2 = new Todo();
-//        $todo2->fill([
-//            'name' => $request->get('name'),
-//            'type' => $request->get('type'),
-//            'user_id' => Auth::id(),
-//        ]);
-//        $todo2->save();
-//
-////        TODO $model->property
-//        $todo3 = new Todo();
-//
-//        $todo3->name = $request->get('name');
-//        $todo3->type = $request->get('type');
-//        $todo3->user_id = Auth::id();
-//
-//        $todo3->save();
-//
-//
-//        $todo3 = Todo::find(1);
-//
-//        $todo3->name = $request->get('name');
-//        $todo3->type = $request->get('type');
-//        $todo3->user_id = Auth::id();
-//
-//        $todo3->save();
-
         return redirect('/');
     }
 
@@ -121,6 +76,10 @@ class TodoController extends Controller
 
     public function edit(Todo $todo)
     {
+        if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('edit', compact('todo'));
     }
 
@@ -128,6 +87,10 @@ class TodoController extends Controller
 
     public function view(Todo $todo)
     {
+        if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('view', compact('todo'));
     }
 
@@ -135,6 +98,11 @@ class TodoController extends Controller
 
     public function update(Request $request, Todo $todo)
     {
+        if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:task,hotfix',
@@ -158,8 +126,18 @@ class TodoController extends Controller
     }
 
 
+    public function panel(Todo $todo)
+    {
+        return view('panel', compact('todo'));
+    }
+
+
     public function destroy(Todo $todo)
     {
+        if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $todo->delete();
         return redirect('/');
     }

@@ -15,6 +15,8 @@ Route::patch('/todos/{todo}', [TodoController::class, 'update'])->name('todo.upd
 Route::get('/todos/{todo}/complete', [TodoController::class, 'complete'])->name('todo.complete');
 Route::get('/todos/{todo}/uncomplete', [TodoController::class, 'uncomplete'])->name('todo.uncomplete');
 
+Route::get('/todos/{todo}/panel', [TodoController::class, 'panel'])->name('todo.panel');
+
 Route::delete('/todos/{todo}', [TodoController::class, 'destroy'])->name('todo.delete');
 
 Auth::routes();

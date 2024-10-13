@@ -40,8 +40,10 @@
             </div>
 
             <div class="form-group mb-3">
-                <label for="datetimepicker">Choose deadline</label>
-                <input type="text" id="datetimepicker" class="form-control" placeholder="Choose date and time" name="datetime">
+                <div class="form-group date" id="datetimepicker">
+                    <label for="datetimepicker">Choose deadline</label>
+                    <input type="text" class="form-control" placeholder="Choose date and time" name="datetime" autocomplete="off">
+                </div>
                 @error('datetime')
                 <div class="invalid-feedback d-block" role="alert">
                     <strong>{{ $message }}</strong>
@@ -68,6 +70,25 @@
         @endisset
     </div>
 
-
+    @section('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#datetimepicker').datetimepicker({
+                    format: 'L', // формат даты
+                    icons: {
+                        time: 'fa fa-clock',
+                        date: 'fa fa-calendar',
+                        up: 'fa fa-chevron-up',
+                        down: 'fa fa-chevron-down',
+                        previous: 'fa fa-chevron-left',
+                        next: 'fa fa-chevron-right',
+                        today: 'fa fa-screenshot',
+                        clear: 'fa fa-trash',
+                        close: 'fa fa-remove'
+                    }
+                });
+            });
+        </script>
+    @endsection
 
 @endsection
