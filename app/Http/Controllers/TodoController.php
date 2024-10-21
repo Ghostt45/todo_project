@@ -49,7 +49,6 @@ class TodoController extends Controller
 
     public function store(Request $request)
     {
-
          $validation = request()->validate([
              'name' => 'required|string|max:255',
              'type' => 'required|in:task,hotfix',
@@ -77,7 +76,7 @@ class TodoController extends Controller
     public function edit(Todo $todo)
     {
         if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
-            abort(403, 'Unauthorized action.');
+            abort(403, 'Rejected.');
         }
 
         return view('edit', compact('todo'));
@@ -88,7 +87,7 @@ class TodoController extends Controller
     public function view(Todo $todo)
     {
         if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
-            abort(403, 'Unauthorized action.');
+            abort(403, 'Rejected.');
         }
 
         return view('view', compact('todo'));
@@ -99,7 +98,7 @@ class TodoController extends Controller
     public function update(Request $request, Todo $todo)
     {
         if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
-            abort(403, 'Unauthorized action.');
+            abort(403, 'Rejected.');
         }
 
 
@@ -126,16 +125,12 @@ class TodoController extends Controller
     }
 
 
-    public function panel(Todo $todo)
-    {
-        return view('panel', compact('todo'));
-    }
 
 
     public function destroy(Todo $todo)
     {
         if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
-            abort(403, 'Unauthorized action.');
+            abort(403, 'Rejected.');
         }
 
         $todo->delete();
@@ -146,6 +141,10 @@ class TodoController extends Controller
 
     public function complete(Todo $todo)
     {
+        if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
+            abort(403, 'Rejected.');
+        }
+
         $todo->status = 1;
         $todo->save();
         return redirect('/');
@@ -155,6 +154,10 @@ class TodoController extends Controller
 
     public function uncomplete(Todo $todo)
     {
+        if ($todo->user_id !== Auth::id() && !Auth::user()->admin) {
+            abort(403, 'Rejected.');
+        }
+
         $todo->status = 0;
         $todo->save();
         return redirect('/');

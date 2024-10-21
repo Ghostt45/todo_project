@@ -40,7 +40,13 @@
         <!-- Left navbar links -->
         <ul class="navbar-nav">
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{ route('todo.index') }}" class="nav-link">Главная</a>
+                <a href="{{ route('todo.index') }}" class="nav-link">Main page</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto mr-3">
+            <li class="nav-item d-none d-sm-inline-block">
+                <p style="margin: 0px">{{$user->name}}'s page</p>
             </li>
         </ul>
 
@@ -48,11 +54,11 @@
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <div class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="#" class="brand-link">
+        <a class="brand-link">
             <img src={{ asset('dist/img/AdminLTELogo.png') }} alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">MyShop</span>
+            <span class="brand-text font-weight-light">Admin Panel</span>
         </a>
 
         <!-- Sidebar -->
@@ -70,7 +76,7 @@
                     <a class="dropdown-item bg-secondary text-white" href="{{ route('logout') }}"
                        onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">
-                        {{ __('Выход') }}
+                        {{ __('Logout') }}
                     </a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -84,10 +90,10 @@
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{route('todo.personal', $user->id)}}" class="nav-link">
                             <i class="nav-icon far fa-calendar-alt"></i>
                             <p>
-                                Товары
+                                Personal Information
 {{--                                @if(isset($products))--}}
 {{--                                    <span class="badge badge-info right">{{ $products->count() }}</span>--}}
 {{--                                @endif--}}
@@ -95,30 +101,20 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{route('todo.security', $user->id)}}" class="nav-link">
                             <i class="nav-icon far fa-calendar-alt"></i>
                             <p>
-                                Пользователи
+                                Security
 {{--                                @if(isset($users))--}}
 {{--                                    <span class="badge badge-info right">{{ $users->count() }}</span>--}}
 {{--                                @endif--}}
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
-                            <p>
-                                Заказы
-                            </p>
-                        </a>
-                    </li>
                 </ul>
             </nav>
-            <!-- /.sidebar-menu -->
         </div>
-        <!-- /.sidebar -->
-    </aside>
+    </div>
 
 
 
@@ -126,12 +122,12 @@
         .sidebar {
             display: flex;
             flex-direction: column;
-            height: 100vh; /* Full height of viewport */
+            height: 100vh;
         }
 
         .sidebar .nav {
-            flex: 1; /* Fills the remaining space */
-            overflow-y: auto; /* Allows scrolling if nav content exceeds available space */
+            flex: 1;
+            overflow-y: auto;
         }
 
         .user-panel {
@@ -189,7 +185,6 @@
 <script src={{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}></script>
 <!-- AdminLTE App -->
 <script src={{ asset('dist/js/adminlte.js') }}></script>
-<!-- AdminLTE for demo purposes -->
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+
 </body>
 </html>

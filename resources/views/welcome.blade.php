@@ -13,6 +13,12 @@
 
         <div class="b-example-divider"></div>
 
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @php
             $types = [
                 'Hotfix' => $hotfixes,
@@ -42,7 +48,7 @@
                                     </div>
                                     <div class="d-flex align-items-center gap-3">
                                         @if(Auth::user()->admin == 1)
-                                            <a href="{{ route('todo.panel', $item->id) }}" style="margin-bottom: 0; text-decoration: none; color: black">{{ $item->user->name }}</a>
+                                            <a href="{{ route('todo.panel', $item->user->id) }}" style="margin-bottom: 0; text-decoration: none; color: black">{{ $item->user->name }}</a>
                                         @endif
 
                                         <div style="width: 10px; height: 10px; border-radius: 100%; background-color: {{ $item->task_color }};"></div>
