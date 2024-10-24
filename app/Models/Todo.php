@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
+use function Laravel\Prompts\warning;
 
 class Todo extends Model
 {
@@ -35,7 +36,7 @@ class Todo extends Model
             if ($available_days <= 1) {
                 return 'red';
             } elseif ($available_days <= 3) {
-                return 'yellow';
+                return 'orange';
             } else {
                 return 'green';
             }

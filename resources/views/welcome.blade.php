@@ -28,17 +28,24 @@
 
         @foreach ($types as $type => $items)
             @if($items->isNotEmpty())
-                <h2>{{$type}}</h2>
-                @foreach ($items as $item)
-                    @if(Auth::user()->admin || $item->user_id == Auth::id())
-                    <div class="list-group w-auto">
-                        <div class="d-flex gap-4">
-                            <div class="list_content list-group-item d-flex align-items-center" style="margin-bottom: 15px; width:100%;">
-                                <div class="d-flex gap-3 justify-content-between w-100">
-                                    <div class="d-flex gap-3">
-                                        <a href="{{ route($item->status ? 'todo.uncomplete' : 'todo.complete', $item->id) }}" class="btn btn-success btn-sm" style="display: flex; justify-content: center; align-items: center;">{{ $item->status ? 'inComplete' : 'Complete' }}</a>
+                <h2 class="mb-2 mt-2">{{ $type }}</h2>
+                <ul class="todo-list" data-widget="todo-list">
+                    @foreach ($items as $item)
+                        @if(Auth::user()->admin || $item->user_id == Auth::id())
+                            <li class="container sortable-item w-100" data-id="{{ $item->order }}"> {{--style="border: 1px solid black;"--}}
+                                <div class="d-flex gap-4 align-items-center" style="margin-bottom: 15px; justify-content: space-between;">
 
-                                        <span class="pt-1 form-checked-content">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="handle">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </span>
+
+                                            <a href="{{ route($item->status ? 'todo.uncomplete' : 'todo.complete', $item->id) }}" class="btn btn-success btn-sm" style="display: flex; justify-content: center; align-items: center;">
+                                                {{ $item->status ? 'In Complete' : 'Complete' }}
+                                            </a>
+
+                                            <span class="pt-1 form-checked-content">
                                             <strong>{{ $item->name }}</strong>
                                             <small class="d-block text-muted">
                                                 <svg class="bi me-1" width="1em" height="1em"><use xlink:href="#calendar-event"/></svg>
@@ -46,15 +53,18 @@
                                             </small>
                                         </span>
                                     </div>
+
                                     <div class="d-flex align-items-center gap-3">
-                                        @if(Auth::user()->admin == 1)
-                                            <a href="{{ route('todo.panel', $item->user->id) }}" style="margin-bottom: 0; text-decoration: none; color: black">{{ $item->user->name }}</a>
-                                        @endif
+                                        <div>
+                                            @if(Auth::user()->admin == 1)
+                                                <a href="{{ route('todo.panel', $item->user->id) }}" style="margin-bottom: 0; text-decoration: none; color: black">{{ $item->user->name }}</a>
+                                            @endif
+                                        </div>
 
-                                        <div style="width: 10px; height: 10px; border-radius: 100%; background-color: {{ $item->task_color }};"></div>
-
-                                        <div class="list_content d-flex align-items-center">
-                                            <p class="m-0">{{ $item->available_days }}</p>
+                                        <div>
+                                            <small class="badge" style="background-color: {{$item->task_color}};">
+                                                <i class="far fa-clock"></i> {{ $item->available_days }}
+                                            </small>
                                         </div>
 
                                         <div>
@@ -73,22 +83,45 @@
                                             <input type="submit" value="Delete" class="btn btn-danger">
                                         </form>
                                     </div>
+
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                @endforeach
+                            </li>
+
+                        @endif
+                    @endforeach
+                </ul>
             @endif
         @endforeach
+
+
 
         @if($hotfixes->isEmpty() && $tasks->isEmpty())
             <h3 class="mb-3">No records</h3>
         @endif
 
-        <div class="container">
+
+
+        <div class="container mt-2">
             <a href="{{ route('todo.create') }}" class="btn btn-primary" style="width: 100px">Add Todo</a>
         </div>
+
+
+
+
+
+
+        <script>
+            $(function() {
+                $(".todo-list").sortable({
+                    handle: ".handle",
+                    update: function(event, ui) {
+                        let sortedIDs = $(".todo-list").sortable("toArray");
+                        console.log(sortedIDs);
+                    }
+                });
+            });
+        </script>
+
     </div>
 
 @endsection
