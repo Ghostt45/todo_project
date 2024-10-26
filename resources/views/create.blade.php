@@ -51,6 +51,7 @@
                 @enderror
             </div>
 
+
             <div class="form-group mb-3">
                 <label for="formFile" class="form-label">Choose file</label>
                 <input class="form-control" type="file" id="formFile" name="image">
